@@ -1,0 +1,15 @@
+.character {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3개의 컬럼을 동등한 비율로 나눔 */
+    gap: 10px;
+}
+
+.character-item {
+    border: 1px solid #000;
+    padding: 10px;
+
+    &__image {
+        width: 100%;
+    }
+}
