@@ -20,15 +20,19 @@ export const fetchListStart = createAction(FETCH_LIST);
 export const fetchListSuccess = createAction(FETCH_LIST_SUCCESS, (data: string) => data);
 export const fetchListFailure = createAction(FETCH_LIST_FAILURE, (err: any) => err);
 
-export const detailCharacterThunk = (id:number) => async (dispatch: Dispatch) => {
+export const detailCharacterThunk = (id:string) => async (dispatch: Dispatch) => {
+
+    console.log("000");
     dispatch(fetchStart());
     try {
         const res = await fetchCharacterApi(id);
 
-        console.log(res);
+        console.log("111");
         
         dispatch(fetchSuccess(res.data));
     } catch(e) {
+        console.log("222");
+
         dispatch(fetchFailure(e));
 
         throw e;
@@ -40,7 +44,7 @@ export const listCharacterThunk = () => async(dispatch: Dispatch) => {
 
     try {
         const res = await fetchCharacterListApi();
-
+        
         dispatch(fetchListSuccess(res.data));
     } catch(e) {
         dispatch(fetchListFailure(e));

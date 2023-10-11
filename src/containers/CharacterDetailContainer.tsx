@@ -9,7 +9,7 @@ import { fetchCharacterApi } from '../lib/api'
 
 const CharacterDetailContainer = () =>{
     const dispatch: Dispatch<any> = useDispatch();
-    const {id} = useParams()
+    const {id} = useParams() as { id: string };
     const { character, isLoading } = useSelector((state: AllCharacter) => ({
         character: state.character,
         isLoading: state.loading.FETCH
@@ -18,7 +18,7 @@ const CharacterDetailContainer = () =>{
     useEffect(() => {
         console.log(typeof(id));
         
-        // dispatch(fetchCharacterApi(id))
+        dispatch(detailCharacterThunk(id))
     }, [dispatch, id])
 
   return (
