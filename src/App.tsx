@@ -1,4 +1,7 @@
 import './App.css'
+import Episode from './components/Episode';
+import Main from './components/Main';
+import MainBTNav from './components/MainBTNav';
 import CharacterDetailContainer from './containers/CharacterDetailContainer';
 import CharacterListContainer from './containers/CharacterListContainer';
 import { Routes, Route, Navigate } from 'react-router-dom';
@@ -11,7 +14,7 @@ export interface AllCharacter {
 export interface Info{
   next: string;
   pages: number;
-  prev: string | null;
+  prev: string;
 }
 
 export interface Character {
@@ -21,14 +24,15 @@ export interface Character {
   readonly species: string;
   readonly type: string;
   readonly gender: string;
-  readonly episode : Episode[];
+  readonly episode : string[];
   readonly image: string;
 }
+
 export type CharacterArray = Character[];
 
 
-export interface Episode{
-  readonly episode: string;
+export interface Episode {
+  readonly episode: string[];
 }
 
 function App() {
@@ -37,12 +41,15 @@ function App() {
     <>
     <Routes>
       {/* <Route path='/' element={<App/>} /> */}
+      {/* <Route  path="/" element={<MainBTNav />}> */}
+      <Route path="/" element={<Main />} >
+      <Route path="/episode" element={<Episode />} />
       <Route path="/character" element={<CharacterListContainer />} />
       <Route path="/character/:id" element={<CharacterDetailContainer />} />
       {/* <Route path="/new-quote" element={<NewQuote />} /> */}
       <Route path="*" element={<Navigate to="/character" />} />
+      </Route>
     </Routes>
-    hi
     </>
   )
 }

@@ -1,0 +1,36 @@
+  
+  .left-button,
+  .right-button {
+    position: fixed;
+    top: 50%; /* 페이지 상단 중앙에 배치 */
+    transform: translateY(-50%); /* 수직 중앙 정렬 */
+    background-color: #0074d9;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .left-button {
+    left: 10px; /* 왼쪽에 배치 */
+  }
+  
+  .right-button {
+    right: 10px; /* 오른쪽에 배치 */
+  }
+  
+  .left-button:hover,
+  .right-button:hover {
+    background-color: #0056b3;
+  }
+
+  // 미디어 쿼리를 사용하여 버튼과 배치를 조정
+@media (max-width: 1000px) {
+    .left-button {
+      left: 0px; // 작은 화면에서 왼쪽에 더 가깝게 배치
+    }
+  
+    .right-button {
+      right: 0px; // 작은 화면에서 오른쪽에 더 가깝게 배치
+    }
+  }
