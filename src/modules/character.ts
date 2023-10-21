@@ -1,5 +1,5 @@
 import { createReducer } from "typesafe-actions";
-import { Character, CharacterArray, Episode, Info } from "../App";
+import { Character, CharacterArray, Episode, EpisodeArray, Info } from "../App";
 import { createAction } from "redux-actions";
 import { fetchCharacterApi, fetchCharacterListApi, fetchCharacterPageApi, fetchEpisoderApi } from "../lib/api";
 import { Dispatch } from "redux";
@@ -7,6 +7,7 @@ import { Dispatch } from "redux";
 const FETCH = "character/FETCH";
 const FETCH_SUCCESS = "character/FETCH_SUCCESS";
 const FETCH_EPISODE_SUCCESS ="character/FETCH_EPISODE_SUCCESS";
+const FETCH_EPISODES_SUCCESS = "character/FETCH_EPISODES_SUCCESS";
 const SET_EPISODE_INITIAL = "character/SET_EPISODE_INITIAL";
 const FETCH_FAILURE = "character/FETCH_FAILURE";
 
@@ -20,6 +21,7 @@ const FETCH_PAGE = "character/FETCH_PAGE";
 export const fetchStart = createAction(FETCH);
 export const fetchSuccess = createAction(FETCH_SUCCESS, (data: string) => data);
 export const fetchEpisodeSuccess = createAction(FETCH_EPISODE_SUCCESS, (data: string) => data);
+export const fetchEpisodesSuccess = createAction(FETCH_EPISODES_SUCCESS, (data: string) => data);
 export const setEisodeInitial = createAction(SET_EPISODE_INITIAL);
 export const fetchFailure = createAction(FETCH_FAILURE, (err: any) => err);
 
@@ -95,6 +97,20 @@ export const listCharacterThunk = () => async(dispatch: Dispatch) => {
     }
 }
 
+export const listEpisodeThunk = (page: string) => async(dispatch: Dispatch) => {
+    dispatch(fetchListStart());
+
+    try {
+        const res = await fetchCharacterPageApi(page);
+        
+        dispatch(fetchEpisodesSuccess(res.data));
+    } catch(e) {
+        dispatch(fetchListFailure(e));
+
+        throw e;
+    }
+}
+
 export interface CharacterState {
     loading: { FETCH: boolean, FETCH_LIST: boolean};
     character: Character;
@@ -107,6 +123,7 @@ export interface AllCharacter {
     info: Info;
     characters: CharacterArray;
     character: Character;
+    episodes: EpisodeArray,
     episode: Episode;
     error: any;
 }
@@ -119,7 +136,8 @@ const initialState: AllCharacter = {
     info: {next: "", pages: 0, prev: ""},
     characters: [{ id: 0, name: '', status: '', species: '', type: '', gender: '', image: '', episode: []}],
     character: { id: 0, name: '', status: '', species: '', type: '', gender: '', image: '', episode: []},
-    episode: {episode: []},
+    episodes: [],
+    episode: {episode: [], name: '', air_date: ''},
     error: null
 }
 
@@ -135,9 +153,25 @@ const character = createReducer(
         }),
         [SET_EPISODE_INITIAL]: (state) => ({
             ...state,
+            episodes: initialState.episodes,
             episode: {
-                episode: initialState.episode.episode
+                name: initialState.episode.name,
+                episode: initialState.episode.episode,
+                air_date: initialState.episode.air_date
             }
+        }),
+        [FETCH_EPISODES_SUCCESS]: (state, action) => ({
+            ...state,
+            loading: {
+                ...state.loading,
+                FETCH_LIST: false, 
+            },
+            info: action.payload.info,
+            episodes: [...state.episodes, ...action.payload.results.map((episode:Episode) => ({
+                episode: episode.episode,
+                name: episode.name,
+                air_date: episode.air_date,
+            }))]
         }),
         [FETCH_EPISODE_SUCCESS]: (state, action) => ({
             ...state,

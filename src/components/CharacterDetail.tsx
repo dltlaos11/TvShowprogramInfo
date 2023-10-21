@@ -21,6 +21,7 @@ const CharacterDetail =({
     
 // }, [])
 
+
   return (
     <>
     {/* { character?.episode.map((el) => {
@@ -37,14 +38,15 @@ const CharacterDetail =({
             <p className="character-detail__species">{character?.species}</p>
             <p className="character-detail__type">{character?.type}</p>
             <p className="character-detail__gender">{character?.gender}</p>
-
-            {episode['episode'].map((el) => 
-            <li className="character-detail__episode">{el}</li>
-            )}
-            {/* <span className="character-detail__episode">{character?.episode}</span> */}
             <img className="character-detail__image" src={character?.image}></img>
         </ul>
 }
+    {/* 타입가드 */}
+    {!isLoading && typeof(episode['episode']) === 'object' &&
+            episode['episode'].map((el) => 
+            <li className="character-detail__episode">{el}</li>
+            )
+    } 
     </>
   )
 }

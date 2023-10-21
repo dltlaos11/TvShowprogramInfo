@@ -1,53 +1,63 @@
-import React, { useState } from 'react'
-// import DatePicker from 'react-datepicker';
-// import 'react-datepicker/dist/react-datepicker.css';
-import { ko } from 'date-fns/esm/locale'; //한국어 설정
-import styled from 'styled-components';
+import { EpisodeArray, Info } from '../App';
+import { useState } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import moment from "moment";
 
+type ValuePiece = Date | null;
 
-const Episode:React.FC = () => {
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-    //일단 placeholder 개념으로 기본값을 오늘 날짜로 주었다.
-// const [startDate, setStartDate] = useState<Date>(today);
-// const [endDate, setEndDate] = useState<Date>(today);
+interface Props {
+    readonly episodes: EpisodeArray; // 🔥
+    readonly isLoading: boolean;
+    readonly info: Info;
+}
 
-    const StyledDatePicker = styled(DatePicker)`
-  width: 122px;
-  height: 48px;
-  border: none;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 100%;
-  padding: 20px;
-  background-color: transparent;
-  color: #707070;
-  position: absolute;
-  top: -48px;
-  left: 5px;
-`;
+const Episode = ({episodes,
+    isLoading,
+    info}: Props) => {
+
+        const [value, onChange] = useState<Value>(new Date());
+        // const [value, onChange] = useState(new Date());
+        // const [dateState, setDateState] = useState(new Date())
+        // const changeDate = (e: any) => {
+        //   setDateState(e)
+        // }
+
   return (
     <>
-    {/* <div>
-    <StyledDatePicker // DatePicker의 styled-component명
-      locale={ko} //한글
-      dateFormat="yyyy.MM.dd"
-      selected={startDate}
-      closeOnScroll={true} // 스크롤을 움직였을 때 자동으로 닫히도록 설정 기본값 false
-      onChange={(date: Date) => setStartDate(date)}
-    />
-  </div> */}
-  {/* <Dash /> //Dash(-) icon 추가 (react-icons) */}
-  {/* <div>
-    <StyledDatePicker
-      locale={ko} //한글
-      dateFormat="yyyy.MM.dd"
-      selected={endDate}
-      closeOnScroll={true} // 스크롤을 움직였을 때 자동으로 닫히도록 설정 기본값 false
-      onChange={(date: Date) => setEndDate(date)}
-    />
-</div> */}
-episode
-</>
+        {/* <Calendar 
+      value={dateState}
+      onChange={changeDate}
+      /> */}
+        <Calendar 
+        onChange={() => {console.log(value);}} 
+        value={value} 
+        
+        // nextLabel='month>>'
+        // nextAriaLabel='Go to next month'
+        // next2Label='year>>'
+        // next2AriaLabel='Go to next year'
+        // prevLabel='<<month'
+        // prevAriaLabel='Go to prev month'
+        // prev2Label='<<year'
+        // prev2AriaLabel='Go to prev year'
+
+        // selectRange={true}
+        maxDate={new Date()} // will not allow date later than today
+        minDate={new Date(2015, 6, 1)} // will not allow date before 1st July 2015
+        showNeighboringMonth={false}
+        // minDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
+        // maxDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
+         formatDay={(locale, date) => moment(date).format("DD")}
+        />
+        {isLoading && "로딩중..."}
+        {console.log(isLoading)}
+        {!isLoading && episodes && (
+            console.log(episodes, info)
+        )}
+    </>
   )
 }
 
