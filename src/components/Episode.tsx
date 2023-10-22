@@ -12,41 +12,39 @@ interface Props {
     readonly episodes: EpisodeArray; // 🔥
     readonly isLoading: boolean;
     readonly info: Info;
+    readonly airDate: string[]
 }
 
-const Episode = ({episodes,
-    isLoading,
-    info}: Props) => {
+const Episode = ({episodes,isLoading,info,airDate}: Props) => {
 
-        const [value, onChange] = useState<Value>(new Date());
-        // const [value, onChange] = useState(new Date());
-        // const [dateState, setDateState] = useState(new Date())
-        // const changeDate = (e: any) => {
-        //   setDateState(e)
-        // }
+        
+        const dateObjects: Date[] = airDate.map((dateString) => new Date(dateString))
 
+        const minDate: Date = new Date(Math.min(...dateObjects.map(date => date.getTime())));
+        const maxDate: Date = new Date(Math.max(...dateObjects.map(date => date.getTime())));
+        const [value, onChange] = useState(minDate);
+        const activeDate = moment(value).format('YYYY-MM-DD');
   return (
     <>
-        {/* <Calendar 
-      value={dateState}
-      onChange={changeDate}
-      /> */}
         <Calendar 
-        onChange={() => {console.log(value);}} 
-        value={value} 
-        
-        // nextLabel='month>>'
-        // nextAriaLabel='Go to next month'
-        // next2Label='year>>'
-        // next2AriaLabel='Go to next year'
-        // prevLabel='<<month'
-        // prevAriaLabel='Go to prev month'
-        // prev2Label='<<year'
-        // prev2AriaLabel='Go to prev year'
+        onChange={() => onChange} 
+        value={activeDate} 
+        tileContent={({ date, view }) => {
+          if (airDate.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
+            return (
+             <>
+               <div className="flex justify-center items-center absoluteDiv">
+                 <div className="dot"></div>
+               </div>
+             </>
+           );
+          }
+        }}
 
         // selectRange={true}
-        maxDate={new Date()} // will not allow date later than today
-        minDate={new Date(2015, 6, 1)} // will not allow date before 1st July 2015
+
+        maxDate={maxDate} // will not allow date later than today
+        minDate={minDate} // will not allow date before 1st July 2015
         showNeighboringMonth={false}
         // minDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
         // maxDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
@@ -55,7 +53,7 @@ const Episode = ({episodes,
         {isLoading && "로딩중..."}
         {console.log(isLoading)}
         {!isLoading && episodes && (
-            console.log(episodes, info)
+            console.log(episodes, info, airDate, minDate, maxDate)
         )}
     </>
   )

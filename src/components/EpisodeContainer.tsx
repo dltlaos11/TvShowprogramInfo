@@ -23,6 +23,16 @@ const EpisodeContainer = () => {
 
   const { episodes, info, isLoading } = useSelector(selectEpisodeList);
 
+  const airDate: string[] = [];
+
+  const formData = (inputDate: string) => {
+    const date = new Date(inputDate);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   useEffect(() => {
     console.log("test");
     dispatch(setEisodeInitial())
@@ -35,8 +45,11 @@ const EpisodeContainer = () => {
 
   return (
     <>
-      {console.log(episodes, info, isLoading)}
-      <Episode episodes={episodes} info={info} isLoading={isLoading}/>
+      {/* {console.log(episodes, info, isLoading)} */}
+      {episodes.map((el) => {
+        airDate.push(formData(el.air_date))
+      })}
+      <Episode episodes={episodes} airDate={airDate} info={info} isLoading={isLoading}/>
     </>
   )
 }
