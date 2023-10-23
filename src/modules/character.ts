@@ -9,6 +9,8 @@ const FETCH_SUCCESS = "character/FETCH_SUCCESS";
 const FETCH_EPISODE_SUCCESS ="character/FETCH_EPISODE_SUCCESS";
 const FETCH_EPISODES_SUCCESS = "character/FETCH_EPISODES_SUCCESS";
 const SET_EPISODE_INITIAL = "character/SET_EPISODE_INITIAL";
+const SET_MODAL_EPISODE = "character/SET_EPISODE_MODAL";
+const SET_MODAL_NAME = "character/SET_NAME_MODAL";
 const FETCH_FAILURE = "character/FETCH_FAILURE";
 
 const FETCH_TRANSMIT_LIST= "character/FETCH_TRANSMIT_LIST";
@@ -19,6 +21,8 @@ const FETCH_LIST_FAILURE = "character/FETCH_LIST_FAILURE";
 const FETCH_PAGE = "character/FETCH_PAGE";
 
 export const fetchStart = createAction(FETCH);
+export const setEpisodeModal = createAction(SET_MODAL_EPISODE, (data: string) => data);
+export const setEpisodeName = createAction(SET_MODAL_NAME, (data: string) => data);
 export const fetchSuccess = createAction(FETCH_SUCCESS, (data: string) => data);
 export const fetchEpisodeSuccess = createAction(FETCH_EPISODE_SUCCESS, (data: string) => data);
 export const fetchEpisodesSuccess = createAction(FETCH_EPISODES_SUCCESS, (data: string) => data);
@@ -141,6 +145,14 @@ const initialState: AllCharacter = {
     error: null
 }
 
+const formData = (inputDate: string) => {
+    const date = new Date(inputDate);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
 const character = createReducer(
     initialState,
     {
@@ -160,6 +172,20 @@ const character = createReducer(
                 air_date: initialState.episode.air_date
             }
         }),
+        [SET_MODAL_EPISODE]: (state, action) => ({
+            ...state,
+            episode: {
+                ...state.episode,
+                episode: action.payload
+            }
+        }),
+        [SET_MODAL_NAME]: (state, action) => ({
+            ...state,
+            episode: {
+                ...state.episode,
+                name: action.payload
+            }
+        }),
         [FETCH_EPISODES_SUCCESS]: (state, action) => ({
             ...state,
             loading: {
@@ -170,7 +196,7 @@ const character = createReducer(
             episodes: [...state.episodes, ...action.payload.results.map((episode:Episode) => ({
                 episode: episode.episode,
                 name: episode.name,
-                air_date: episode.air_date,
+                air_date: formData(episode.air_date),
             }))]
         }),
         [FETCH_EPISODE_SUCCESS]: (state, action) => ({
