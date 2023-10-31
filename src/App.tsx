@@ -1,11 +1,12 @@
 import './App.css'
-import EpisodeContainer from './components/EpisodeContainer';
-import Episode from './components/EpisodeContainer';
+import EpisodeContainer from './containers/EpisodeContainer';
+import Episode from './containers/EpisodeContainer';
 import Main from './components/Main';
 import MainBTNav from './components/MainBTNav';
 import CharacterDetailContainer from './containers/CharacterDetailContainer';
 import CharacterListContainer from './containers/CharacterListContainer';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import BookMark from './components/BookMark';
 
 export interface AllCharacter {
   readonly info: Info;
@@ -47,12 +48,14 @@ function App() {
       {/* <Route path='/' element={<App/>} /> */}
       {/* <Route  path="/" element={<MainBTNav />}> */}
       <Route path="/" element={<Main />} >
-      <Route path="/episode" element={<EpisodeContainer />} />
-      <Route path="/character" element={<CharacterListContainer />} />
-      <Route path="/character/:id" element={<CharacterDetailContainer />} />
-      {/* <Route path="/new-quote" element={<NewQuote />} /> */}
-      <Route path="*" element={<Navigate to="/character" />} />
+        <Route path="/episode" element={<EpisodeContainer />} />
+        <Route path="/character" element={<CharacterListContainer />} />
+        <Route path="/character/:id" element={<CharacterDetailContainer />} />
+        {/* <Route path="/new-quote" element={<NewQuote />} /> */}
+        
+        <Route path="*" element={<Navigate to="/character" />} />
       </Route>
+      <Route path='/bookmark' element={<BookMark />} />
     </Routes>
     </>
   )

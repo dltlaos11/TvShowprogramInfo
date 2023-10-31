@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react'
 import { Character, Episode } from '../App';
+import AddBookMarkBtn from './mover/AddBookMarkBtn';
+import { Outlet } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 interface Props {
     readonly id: string | undefined;
@@ -14,21 +17,18 @@ const CharacterDetail =({
     isLoading,
     episode
 }: Props) => {
+  const referrer = document.referrer;
 
 
-//   useEffect(() => {
-//     console.log(character?.episode);
-    
-// }, [])
 
 
   return (
     <>
-    {/* { character?.episode.map((el) => {
-      console.log(el)
-    })
-    } */}
-    
+
+
+    {/* 버튼, 이동버튼 컴포넌트화 
+        상세페이지는 fb, 전체적인 것은 redux에서
+    */}
     <h2>상세 항목</h2>
     {isLoading && "로딩중..."}
     {!isLoading &&  
@@ -46,7 +46,13 @@ const CharacterDetail =({
             episode['episode'].map((el) => 
             <li className="character-detail__episode">{el}</li>
             )
-    } 
+    }
+{console.log(referrer.slice())}    
+        <div>
+            <Outlet />
+            
+        </div>
+    
     </>
   )
 }

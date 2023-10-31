@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { AllCharacter, fetchPageThunk, listEpisodeThunk, setEisodeInitial } from '../modules/character';
 import { createSelector } from 'reselect';
-import Episode from './EpisodeCalendar';
+import Episode from '../components/EpisodeCalendar';
 import { db } from '../../firebase';
 import { collection, query, where, getDocs, DocumentData, QuerySnapshot, onSnapshot } from "firebase/firestore";
-import EpisodeCalendar from './EpisodeCalendar';
+import EpisodeCalendar from '../components/EpisodeCalendar';
 
 const EpisodeContainer = () => {
   const dispatch: Dispatch<any> = useDispatch();
@@ -64,14 +64,6 @@ const EpisodeContainer = () => {
 //     // });
 //   }
 
-// 북마크 페이지
-// 캐릭터 페이지와 동일한 페이지
-// 페이지이동 없음 ❌
-// 북마크 페이지에서도 캐릭터 페이지 상세페이지 똑같고 다 똑같다
-// 캐릭터 상세 페이지 북마크 추가버튼 ,
-// 북마크 상세 페이지에서는 추가 ❌, 검색
-// 캐릭터에서는 api에서 받고 북마크는 파베
-// 파베에서 받는 흐름 api받는 흐름과 유사하게, 코드 재사용성 있는것도 있고 없는것두 있고
 
   useEffect(() => {
     console.log("test");

@@ -6,6 +6,7 @@ import { listCharacterThunk } from '../modules/character';
 import CharacterList from '../components/CharacterList';
 import { Dispatch } from 'redux';
 import { createSelector } from "reselect";
+import NavCharacterPage from '../components/mover/NavCharacterPage';
 
 
 const CharacterListContainer = () => {
@@ -21,7 +22,6 @@ const CharacterListContainer = () => {
 
     const selectCharacterListData = (state: AllCharacter) => ({
         characters: state.characters,
-        info: state.info,
         isLoading: state.loading.FETCH_LIST
     });
 
@@ -30,7 +30,7 @@ const CharacterListContainer = () => {
       (data) => data
     );
 
-    const { characters, info, isLoading } = useSelector(selectCharacterList);
+    const { characters,  isLoading } = useSelector(selectCharacterList);
 
     useEffect(() => {
         console.log("how ?");
@@ -40,7 +40,11 @@ const CharacterListContainer = () => {
     }, [dispatch])
 
   return (
-    <CharacterList characters={characters} info={info} isLoading={isLoading}></CharacterList>
+    <>
+    {/* 페이지 이동 버튼 컴포넌트화, 캐릭터 페이지 list 재사용 */}
+      <NavCharacterPage/>
+      <CharacterList characters={characters} isLoading={isLoading}></CharacterList>
+    </>
   )
 }
 

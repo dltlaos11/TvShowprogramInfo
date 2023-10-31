@@ -8,6 +8,7 @@ const FETCH = "character/FETCH";
 const FETCH_SUCCESS = "character/FETCH_SUCCESS";
 const FETCH_EPISODE_SUCCESS ="character/FETCH_EPISODE_SUCCESS";
 const FETCH_EPISODES_SUCCESS = "character/FETCH_EPISODES_SUCCESS";
+const FETCH_LIST_BOOKMARK_SUCCESS = "character/FETCH_LIST_BOOKMARK_SUCCESS";
 const SET_EPISODE_INITIAL = "character/SET_EPISODE_INITIAL";
 const SET_MODAL_EPISODE = "character/SET_EPISODE_MODAL";
 const SET_MODAL_NAME = "character/SET_NAME_MODAL";
@@ -25,6 +26,7 @@ export const setEpisodeModal = createAction(SET_MODAL_EPISODE, (data: string) =>
 export const setEpisodeName = createAction(SET_MODAL_NAME, (data: string) => data);
 export const fetchSuccess = createAction(FETCH_SUCCESS, (data: string) => data);
 export const fetchEpisodeSuccess = createAction(FETCH_EPISODE_SUCCESS, (data: string) => data);
+export const fetchListBookMark = createAction(FETCH_LIST_BOOKMARK_SUCCESS, (data:string) => data);
 export const fetchEpisodesSuccess = createAction(FETCH_EPISODES_SUCCESS, (data: string) => data);
 export const setEisodeInitial = createAction(SET_EPISODE_INITIAL);
 export const fetchFailure = createAction(FETCH_FAILURE, (err: any) => err);
@@ -39,11 +41,19 @@ export const fetchPage = createAction(FETCH_PAGE, (data: string) => data);
 export const episodeListThunk = (id: string | null) => async(dispatch: Dispatch) => {
     console.log("go?");
     
+    
     dispatch(fetchStart());
     try {
-        const res = await fetchEpisoderApi(id);
+        if (id?.substring(0,5)=== 'https'){
+            
+            const res = await fetchEpisoderApi(id);
 
-        dispatch(fetchEpisodeSuccess(res.data.name));
+            dispatch(fetchEpisodeSuccess(res.data.name));
+        }
+        else {
+            dispatch(fetchEpisodeSuccess(id as string));
+        }
+
         // console.log(res.data.name);
         
     }
@@ -87,13 +97,23 @@ export const fetchPageThunk = (page:string) => async(dispatch: Dispatch) => {
     }
 }
 
-export const listCharacterThunk = () => async(dispatch: Dispatch) => {
+export const listCharacterThunk = (x?: any) => async(dispatch: Dispatch) => {
     dispatch(fetchListStart());
-
+    console.log(x);
+    
     try {
-        const res = await fetchCharacterListApi();
-        
-        dispatch(fetchListSuccess(res.data));
+        if(x){
+            dispatch(fetchListBookMark(x));
+            console.log(x);
+            
+        }
+        else{
+            const res = await fetchCharacterListApi();
+            console.log(res.data);
+            
+            dispatch(fetchListSuccess(res.data));
+        }
+
     } catch(e) {
         dispatch(fetchListFailure(e));
 
@@ -245,6 +265,15 @@ const character = createReducer(
             },
             info: action.payload.info,
             characters: action.payload.results,
+        }),
+        [FETCH_LIST_BOOKMARK_SUCCESS]: (state, action) => ({
+            ...state,
+            loading: {
+                ...state.loading,
+                FETCH_LIST: false,
+            },
+            info: action.payload.info,
+            characters: action.payload
         }),
         [FETCH_LIST_FAILURE]: (state, action) => ({
             ...state,
