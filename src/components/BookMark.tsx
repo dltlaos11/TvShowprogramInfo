@@ -5,7 +5,7 @@ import { db } from '../../firebase';
 import { Dispatch } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { CharacterArray } from '../App';
-import { AllCharacter, listCharacterThunk } from '../modules/character';
+import { AllCharacter, fetchTasksList, listCharacterThunk } from '../modules/character';
 import { createSelector } from 'reselect';
 
 const BookMark = () => {
@@ -16,7 +16,8 @@ const BookMark = () => {
 
     const selectCharacterListData = (state: AllCharacter) => ({
         characters: state.characters,
-        isLoading: state.loading.FETCH_LIST
+        isLoading: state.loading.FETCH_LIST,
+        task: state.tasks
     });
 
     const selectCharacterList = createSelector(
@@ -24,7 +25,7 @@ const BookMark = () => {
       (data) => data
     );
 
-    const { characters,  isLoading } = useSelector(selectCharacterList);
+    const { characters,  isLoading,  task} = useSelector(selectCharacterList);
 
     useEffect(() => {
 
@@ -56,7 +57,7 @@ const BookMark = () => {
         
     useEffect(() => {
         dispatch(listCharacterThunk(tasks));
-
+        dispatch(fetchTasksList(tasks))
         console.log(tasks, 'test');
     }, [tasks])
     
@@ -66,7 +67,7 @@ const BookMark = () => {
         {console.log(characters,  isLoading)}
         
         {isLoading && "로딩중..."}
-        {!isLoading && <CharacterList characters={characters} isLoading={isLoading} />}
+        {!isLoading && <CharacterList characters={characters} isLoading={isLoading} task={task} />}
     </>
   )
 }

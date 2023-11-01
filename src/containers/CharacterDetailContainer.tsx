@@ -21,6 +21,7 @@ const CharacterDetailContainer = () =>{
     // }));
 
     const selectCharacterData = (state: AllCharacter) => ({
+      characters: state.characters,
       episode: state.episode,
       character: state.character,
       isLoading: state.loading.FETCH,
@@ -31,13 +32,13 @@ const CharacterDetailContainer = () =>{
       (data) => data
     );
 
-    const { character, isLoading, episode } = useSelector(selectCharacter);
+    const { character, isLoading, episode, characters } = useSelector(selectCharacter);
 
     // 숫자만 남기기 위한 filter 메소드 사용  
     // console.log(character?.episode);
 
     useEffect(() => {
-      console.log(character);
+      console.log(character, characters);
 
 
         character?.episode?.map((el) =>
@@ -55,7 +56,7 @@ const CharacterDetailContainer = () =>{
       
     // console.log(episode);
 
-    }, [])
+    }, [dispatch])
 
   return (
     <>

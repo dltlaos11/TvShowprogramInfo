@@ -14,7 +14,9 @@ const SET_MODAL_EPISODE = "character/SET_EPISODE_MODAL";
 const SET_MODAL_NAME = "character/SET_NAME_MODAL";
 const FETCH_FAILURE = "character/FETCH_FAILURE";
 
+const FETCH_BMK_TRANSMIT_LIST = "character/FETCH_BMK_TRANSMIT_LIST";
 const FETCH_TRANSMIT_LIST= "character/FETCH_TRANSMIT_LIST";
+const FETCH_TASKS_LIST = "character/FETCH_TASKS_LIST";
 const FETCH_LIST = "character/FETCH_LIST";
 const FETCH_LIST_SUCCESS = "character/FETCH_LIST_SUCCESS";
 const FETCH_LIST_FAILURE = "character/FETCH_LIST_FAILURE";
@@ -31,7 +33,9 @@ export const fetchEpisodesSuccess = createAction(FETCH_EPISODES_SUCCESS, (data: 
 export const setEisodeInitial = createAction(SET_EPISODE_INITIAL);
 export const fetchFailure = createAction(FETCH_FAILURE, (err: any) => err);
 
+export const fetchBMKTransmitList = createAction(FETCH_BMK_TRANSMIT_LIST, (data: number) => data);
 export const fetchTransmitList = createAction(FETCH_TRANSMIT_LIST, (data:number) => data);
+export const fetchTasksList = createAction(FETCH_TASKS_LIST, (data:CharacterArray) => data);
 export const fetchListStart = createAction(FETCH_LIST);
 export const fetchListSuccess = createAction(FETCH_LIST_SUCCESS, (data: string) => data);
 export const fetchListFailure = createAction(FETCH_LIST_FAILURE, (err: any) => err);
@@ -54,8 +58,6 @@ export const episodeListThunk = (id: string | null) => async(dispatch: Dispatch)
             dispatch(fetchEpisodeSuccess(id as string));
         }
 
-        // console.log(res.data.name);
-        
     }
     catch(e) {
         dispatch(fetchFailure(e));
@@ -63,19 +65,16 @@ export const episodeListThunk = (id: string | null) => async(dispatch: Dispatch)
         throw e;
     }
 }
-
+// UI 재사용성 고려한 코드 작성 중 비동기 요청(네트워크)을 하는 Thunk, 매개변수로 분기점 구분
 export const detailCharacterThunk = (id:string) => async (dispatch: Dispatch) => {
 
-    console.log("000");
     dispatch(fetchStart());
     try {
         const res = await fetchCharacterApi(id);
 
-        console.log("111");
         
         dispatch(fetchSuccess(res.data));
     } catch(e) {
-        console.log("222");
 
         dispatch(fetchFailure(e));
 
@@ -99,17 +98,14 @@ export const fetchPageThunk = (page:string) => async(dispatch: Dispatch) => {
 
 export const listCharacterThunk = (x?: any) => async(dispatch: Dispatch) => {
     dispatch(fetchListStart());
-    console.log(x);
     
     try {
         if(x){
             dispatch(fetchListBookMark(x));
-            console.log(x);
             
         }
         else{
             const res = await fetchCharacterListApi();
-            console.log(res.data);
             
             dispatch(fetchListSuccess(res.data));
         }
@@ -149,6 +145,7 @@ export interface AllCharacter {
     character: Character;
     episodes: EpisodeArray,
     episode: Episode;
+    tasks: CharacterArray,
     error: any;
 }
 
@@ -162,6 +159,7 @@ const initialState: AllCharacter = {
     character: { id: 0, name: '', status: '', species: '', type: '', gender: '', image: '', episode: []},
     episodes: [],
     episode: {episode: [], name: '', air_date: ''},
+    tasks: [{ id: 0, name: '', status: '', species: '', type: '', gender: '', image: '', episode: []}],
     error: null
 }
 
@@ -246,10 +244,20 @@ const character = createReducer(
             },
             error: action.payload,
         }),
+
         [FETCH_TRANSMIT_LIST]: (state, action) => ({
-            ...state, // 이전의 state를 그대로
+            ...state, // 이전의 state를 그대로 🔥
             character: {...state.characters[action.payload-1]}
         }),
+        [FETCH_BMK_TRANSMIT_LIST]: (state, action) => ({
+            ...state, 
+            character: {...state.characters.filter((el) => el.id === action.payload)[0]} //  🔥
+        }),
+        [FETCH_TASKS_LIST]: (state, action) => ({
+            ...state, // FireStore의 Bookmark collecion 저장
+            tasks: action.payload,
+        }),
+
         [FETCH_LIST]: (state) => ({
             ...state,
             loading: {

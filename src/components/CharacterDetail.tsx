@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react'
 import { Character, Episode } from '../App';
-import AddBookMarkBtn from './mover/AddBookMarkBtn';
-import { Outlet } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { Outlet,  } from 'react-router-dom';
+
 
 interface Props {
     readonly id: string | undefined;
@@ -24,8 +22,8 @@ const CharacterDetail =({
 
   return (
     <>
-
-
+    {console.log(character, episode)}
+    
     {/* 버튼, 이동버튼 컴포넌트화 
         상세페이지는 fb, 전체적인 것은 redux에서
     */}

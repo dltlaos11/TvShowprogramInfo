@@ -2,7 +2,6 @@ import './App.css'
 import EpisodeContainer from './containers/EpisodeContainer';
 import Episode from './containers/EpisodeContainer';
 import Main from './components/Main';
-import MainBTNav from './components/MainBTNav';
 import CharacterDetailContainer from './containers/CharacterDetailContainer';
 import CharacterListContainer from './containers/CharacterListContainer';
 import { Routes, Route, Navigate } from 'react-router-dom';
