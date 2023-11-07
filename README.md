@@ -45,3 +45,15 @@ If you are developing a production application, we recommend updating the config
 React Query는 서버 상태를 관리하는 레이어 전체를 추상화 시켜 개발자가 관리하는 앱 내의 상태에서 서버 상태를 제외한 `UI 상태` 에만 집중하여 개발할 수 있도록 했습니다.
 
 그렇다면 웬만한 경우에는 비동기 처리를 위한 thunk, saga 같은 미들웨어 라이브러리도 불필요 해지고, 동기적인 UI 상태만 관리할 거라면 redux 씩이나 필요 없어지는 연쇄 작용이 일어날 수 있는 것(그렇다고 Redux가 불필요해졌다는 것은 아닙니다)이죠.
+
+## React Query 버전 3 및 버전 4 비교
+
+1. v4에서 설치 및 가져오기를 수행하려면 ```react-query``` 대신 ```@tanstack/react-query``` 를 권장합니다.
+
+2. 쿼리 키는 ```배열```이어야 합니다. 그러니 과정에서 쿼리 키 배열 대신 문자열을 사용하는 경우 배열로 묶어야 합니다.
+
+3. 개발자 도구를 별도로 설치하고 ```@tanstack/react-query-devtools```에서 가져와야 합니다.
+
+4. ```setLogger```가 제거되었습니다. 대신 ```QueryClient``` 옵션으로 로거를 추가해야 합니다. -> 테스트 용도
+
+5. 이제 ```setQueryData```에서 ```onSuccess```가 호출되지 않습니다. React Query 버전 4에서 가장 조정하기 어려운 문제에 속함.
