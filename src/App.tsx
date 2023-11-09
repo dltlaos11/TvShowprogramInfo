@@ -6,6 +6,9 @@ import CharacterDetailContainer from './containers/CharacterDetailContainer';
 import CharacterListContainer from './containers/CharacterListContainer';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import BookMark from './components/BookMark';
+import DataFetcher from './components/DataFetcher';
+
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 export interface AllCharacter {
   readonly info: Info;
@@ -41,21 +44,26 @@ export interface Episode {
 
 function App() {
 
+  const queryClient = new QueryClient();
+
   return (
     <>
-    <Routes>
-      {/* <Route path='/' element={<App/>} /> */}
-      {/* <Route  path="/" element={<MainBTNav />}> */}
-      <Route path="/" element={<Main />} >
-        <Route path="/episode" element={<EpisodeContainer />} />
-        <Route path="/character" element={<CharacterListContainer />} />
-        <Route path="/character/:id" element={<CharacterDetailContainer />} />
-        {/* <Route path="/new-quote" element={<NewQuote />} /> */}
-        
-        <Route path="*" element={<Navigate to="/character" />} />
-      </Route>
-      <Route path='/bookmark' element={<BookMark />} />
-    </Routes>
+    <QueryClientProvider client={queryClient}>
+          <Routes>
+          {/* <Route path='/' element={<App/>} /> */}
+          {/* <Route  path="/" element={<MainBTNav />}> */}
+          <Route path="/" element={<Main />} >
+            <Route path="/episode" element={<EpisodeContainer />} />
+            <Route path="/character" element={<CharacterListContainer />} />
+            <Route path="/datafetcher" element={<DataFetcher />} />
+            <Route path="/character/:id" element={<CharacterDetailContainer />} />
+            {/* <Route path="/new-quote" element={<NewQuote />} /> */}
+            
+            <Route path="*" element={<Navigate to="/character" />} />
+          </Route>
+          <Route path='/bookmark' element={<BookMark />} />
+        </Routes>
+      </QueryClientProvider>
     </>
   )
 }

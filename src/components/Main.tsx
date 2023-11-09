@@ -13,10 +13,14 @@ const Main = () => {
         <Link to={`/episode`}>
             <button>에피소드</button>
         </Link>
-
+        
         <Link to={`/bookmark`}>
           <button>북마크</button>
         </Link>
+        <Link to={`/datafetcher`}>
+          <button>리액트 쿼리</button>
+        </Link>
+
 
 
         <div>
