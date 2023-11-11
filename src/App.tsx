@@ -1,21 +1,21 @@
-import './App.css'
-import EpisodeContainer from './containers/EpisodeContainer';
-import Episode from './containers/EpisodeContainer';
-import Main from './components/Main';
-import CharacterDetailContainer from './containers/CharacterDetailContainer';
-import CharacterListContainer from './containers/CharacterListContainer';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import BookMark from './components/BookMark';
-import DataFetcher from './components/DataFetcher';
+import "./App.css";
+import EpisodeContainer from "./containers/EpisodeContainer";
+import Episode from "./containers/EpisodeContainer";
+import Main from "./components/Main";
+import CharacterDetailContainer from "./containers/CharacterDetailContainer";
+import CharacterListContainer from "./containers/CharacterListContainer";
+import { Routes, Route, Navigate } from "react-router-dom";
+import BookMark from "./components/BookMark";
+import DataFetcher from "./components/DataFetcher";
 
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export interface AllCharacter {
   readonly info: Info;
-  readonly results: CharacterArray
+  readonly results: CharacterArray;
 }
 
-export interface Info{
+export interface Info {
   next: string;
   pages: number;
   prev: string;
@@ -28,7 +28,7 @@ export interface Character {
   readonly species: string;
   readonly type: string;
   readonly gender: string;
-  readonly episode : string[];
+  readonly episode: string[];
   readonly image: string;
 }
 
@@ -43,29 +43,31 @@ export interface Episode {
 }
 
 function App() {
-
   const queryClient = new QueryClient();
 
   return (
     <>
-    <QueryClientProvider client={queryClient}>
-          <Routes>
+      <QueryClientProvider client={queryClient}>
+        <Routes>
           {/* <Route path='/' element={<App/>} /> */}
           {/* <Route  path="/" element={<MainBTNav />}> */}
-          <Route path="/" element={<Main />} >
+          <Route path="/" element={<Main />}>
             <Route path="/episode" element={<EpisodeContainer />} />
             <Route path="/character" element={<CharacterListContainer />} />
             <Route path="/datafetcher" element={<DataFetcher />} />
-            <Route path="/character/:id" element={<CharacterDetailContainer />} />
+            <Route
+              path="/character/:id"
+              element={<CharacterDetailContainer />}
+            />
             {/* <Route path="/new-quote" element={<NewQuote />} /> */}
-            
+
             <Route path="*" element={<Navigate to="/character" />} />
           </Route>
-          <Route path='/bookmark' element={<BookMark />} />
+          <Route path="/bookmark" element={<BookMark />} />
         </Routes>
       </QueryClientProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
